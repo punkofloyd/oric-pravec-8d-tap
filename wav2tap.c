@@ -1,5 +1,6 @@
 /* wav2tap tool by F.Frances */
 #include <stdio.h>
+#include <stdlib.h>
 
 struct {
 	char sig[4];
@@ -21,7 +22,10 @@ int sync_ok=0;
 int offset,pos;
 FILE *in, *out;
 
-main(int argc,char **argv)
+void synchronize();
+int getbyte();
+
+int main(int argc,char **argv)
 {	
 	unsigned start,end,byte;
 	if (argc!=3) { printf("Usage: %s file.wav file.tap\n",argv[0]); exit(1);}
@@ -51,7 +55,7 @@ main(int argc,char **argv)
 	}
 }
 
-getbit()
+int getbit()
 {
 	int val,length=1;
 	val=getc(in); pos++;
@@ -74,7 +78,7 @@ getbit()
 	else return 1;
 }
 
-getbyte()
+int getbyte()
 {
 	int decaleur=0,byte=0,i,bit,sum=0;
 	getbit();
@@ -91,7 +95,7 @@ getbyte()
 	return byte;
 }
 
-synchronize()
+void synchronize()
 {
 	int decaleur=0,val;
 	printf("Searching synchro...\n");
