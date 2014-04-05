@@ -1,5 +1,6 @@
 /* wavclean tool by F.Frances */
 #include <stdio.h>
+#include <stdlib.h>
 
 #define THRESHOLD 23
 	/* a short period should be 18 samples at 44.1 kHz */
@@ -26,7 +27,11 @@ struct riff header;
 FILE *in, *out;
 int size;
 
-main(int argc,char **argv)
+void convert();
+void output_level(int level);
+void output_silence(int length);
+
+int main(int argc,char **argv)
 {	
 	int i;
 	if (argc!=3) { printf("Usage: wavclean file.wav outfile\n"); exit(1);}
@@ -48,7 +53,7 @@ main(int argc,char **argv)
 	fwrite(&sample_riff,1,sizeof(struct riff),out);
 }
 
-convert()
+void convert()
 {
    int max=0,min=255,up=0,thres=128,last=0;
    int val,length1,length2;
@@ -79,13 +84,13 @@ convert()
     }
 }
 
-output_level(int level)
+void output_level(int level)
 {
 	putc(level==1?0xC0:0x40,out);
 	size++;
 }
 
-output_silence(int length)
+void output_silence(int length)
 {
 	int i;
 	for (i=0;i<length;i++) putc(0x80,out);
