@@ -1,6 +1,7 @@
 /* tap2wav tool by F.Frances*/
 
 #include <stdio.h>
+#include <string.h>
 
 FILE *in,*out;
 int file_size;
@@ -83,7 +84,7 @@ void emit_gap()
   for (i=0;i<100;i++) emit_bit(1); 
 }
 
-init(int argc, char *argv[])
+int init(int argc, char *argv[])
 {
   if (argc<3) return 1;
   if (argv[1][0]=='-') {
@@ -108,7 +109,7 @@ init(int argc, char *argv[])
   return 0;
 }
 
-main(int argc,char *argv[])
+int main(int argc,char *argv[])
 {
   int i,size;
   unsigned char header[9];
@@ -117,7 +118,7 @@ main(int argc,char *argv[])
     printf("Usage: %s [ -8 | -11 ] <.TAP file> <.WAV file>\n",argv[0]);
     printf("Options: -8  produces a  8 kHz WAV file\n");
     printf("         -11 produces a 11 kHz WAV file  (default is 4800 Hz)\n");
-    exit(1);
+    return 1;
   }
 
   fwrite(&sample_riff,1,sizeof(sample_riff),out);
